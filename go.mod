@@ -1,4 +1,4 @@
-module github.com/willtrking/FreezerTruck
+module github.com/willtrking/freezer-truck
 
 go 1.14
 

@@ -17,7 +17,6 @@ type Config struct {
 	Username string
 	Password string
 	PrivateKey string
-	PrivateKeyPass string
 	InsecureKnownHosts bool
 	BadgerPath string
 	ConcurrencyLimit int
@@ -27,6 +26,10 @@ type Config struct {
 }
 
 func (c Config) Validate()  {
+
+	if c.ScheduleCron == "" {
+		log.Fatal("Missing cron schedule, set TRUCK_SCHEDULECRON")
+	}
 
 	if c.Host == "" {
 		log.Fatal("Missing SSH host, set TRUCK_HOST")
@@ -87,6 +90,12 @@ func main() {
 	var config Config
 
 	err := envconfig.Process("truck", &config)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	config.Validate()
 
 	logger, err := configZap()
 	if err != nil {
