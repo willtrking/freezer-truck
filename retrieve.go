@@ -11,7 +11,6 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
-
 type RetrievalOptions struct {
 	// Remote path where files are stored
 	RemoteFileRoot string
@@ -31,7 +30,6 @@ type RetrievalOptions struct {
 	BadgerDb *badger.DB
 
 	ConcurrencyLimiter *Limiter
-
 }
 
 func RetrieveNewFiles(logger *zap.Logger, opts RetrievalOptions) error {
@@ -57,7 +55,6 @@ func RetrieveNewFiles(logger *zap.Logger, opts RetrievalOptions) error {
 		return err
 	}
 
-
 	for _, toDownload := range files {
 
 		opts.ConcurrencyLimiter.Acquire()
@@ -71,11 +68,9 @@ func RetrieveNewFiles(logger *zap.Logger, opts RetrievalOptions) error {
 		}(toDownload)
 	}
 
-
 	return nil
 
 }
-
 
 // Check to see if a file has not yet been downloaded, and download it to tmp dir if it is
 // Update DB after to mark as downloaded, and move out of tmp folder.
@@ -89,7 +84,7 @@ func retrieveFile(logger *zap.Logger, sftpClient *sftp.Client, file os.FileInfo,
 			return err
 		}
 		if !shouldDownload {
-			logger.Debug("Skipped remote file "+CreateFilePath(opts.RemoteFileRoot, file))
+			logger.Debug("Skipped remote file " + CreateFilePath(opts.RemoteFileRoot, file))
 			return nil
 		}
 
@@ -109,7 +104,7 @@ func retrieveFile(logger *zap.Logger, sftpClient *sftp.Client, file os.FileInfo,
 				}
 
 				if didCreate {
-					logger.Info("Created local dir "+dirLocalPath)
+					logger.Info("Created local dir " + dirLocalPath)
 				}
 
 				stepStat := dirWalker.Stat()
@@ -127,7 +122,6 @@ func retrieveFile(logger *zap.Logger, sftpClient *sftp.Client, file os.FileInfo,
 			err = DownloadFile(logger, sftpClient, CreateFilePath(opts.RemoteFileRoot, file), CreateFilePath(opts.TempFileRoot, file))
 		}
 
-
 		if err != nil {
 			return err
 		}
@@ -142,13 +136,11 @@ func retrieveFile(logger *zap.Logger, sftpClient *sftp.Client, file os.FileInfo,
 	})
 }
 
-
-
 // Create a file path for a root + file
 func CreateFilePath(root string, file os.FileInfo) string {
 
 	fileName := strings.Trim(file.Name(), "/")
 	root = strings.Trim(root, "/")
 
-	return "/"+root+"/"+fileName
+	return "/" + root + "/" + fileName
 }

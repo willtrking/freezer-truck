@@ -8,11 +8,10 @@ import (
 	"go.uber.org/zap"
 )
 
-
 // Download a file, and emit progress information
 func DownloadFile(logger *zap.Logger, client *sftp.Client, src string, dest string) error {
 
-	logger.Info("Starting download of "+src)
+	logger.Info("Starting download of " + src)
 	destFile, err := os.OpenFile(dest, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0666)
 
 	if err != nil {
@@ -46,4 +45,3 @@ func DownloadFile(logger *zap.Logger, client *sftp.Client, src string, dest stri
 
 	return destFile.Sync()
 }
-

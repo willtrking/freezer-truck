@@ -2,7 +2,7 @@ package main
 
 func NewLimiter(limit int) *Limiter {
 	return &Limiter{
-		guardChannel:make(chan struct{}, limit),
+		guardChannel: make(chan struct{}, limit),
 	}
 }
 

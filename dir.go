@@ -11,4 +11,3 @@ func MkdirIfNotExists(path string) (bool, error) {
 
 	return false, nil
 }
-

@@ -18,7 +18,6 @@ func FindSingleLevelData(client *sftp.Client, root string) ([]os.FileInfo, error
 	return client.ReadDir(root)
 }
 
-
 // Returns a boolean if the file should be downloaded
 func CheckShouldDownload(txn *badger.Txn, root string, file os.FileInfo) (bool, error) {
 

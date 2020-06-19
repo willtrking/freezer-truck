@@ -12,20 +12,20 @@ import (
 )
 
 type Config struct {
-	ScheduleCron string
-	Host string
-	Username string
-	Password string
-	PrivateKey string
+	ScheduleCron       string
+	Host               string
+	Username           string
+	Password           string
+	PrivateKey         string
 	InsecureKnownHosts bool
-	BadgerPath string
-	ConcurrencyLimit int
-	RemoteFileRoot string
-	LocalFileRoot string
-	TempFileRoot string
+	BadgerPath         string
+	ConcurrencyLimit   int
+	RemoteFileRoot     string
+	LocalFileRoot      string
+	TempFileRoot       string
 }
 
-func (c Config) Validate()  {
+func (c Config) Validate() {
 
 	if c.ScheduleCron == "" {
 		log.Fatal("Missing cron schedule, set TRUCK_SCHEDULECRON")
@@ -64,7 +64,7 @@ func (c Config) Validate()  {
 	}
 }
 
-func (c Config) Auth() goph.Auth  {
+func (c Config) Auth() goph.Auth {
 
 	if c.PrivateKey != "" {
 		return goph.Key(c.PrivateKey, c.Password)
@@ -82,10 +82,7 @@ func (c Config) HostKeyCallback() (ssh.HostKeyCallback, error) {
 	return goph.DefaultKnownHosts()
 }
 
-
-
 func main() {
-
 
 	var config Config
 
@@ -114,7 +111,6 @@ func main() {
 
 	defer client.Close()
 
-
 	db, err := badger.Open(badger.DefaultOptions(config.BadgerPath))
 	if err != nil {
 		log.Fatal(err)
@@ -123,12 +119,12 @@ func main() {
 	defer db.Close()
 
 	opts := RetrievalOptions{
-		RemoteFileRoot:config.RemoteFileRoot,
-		LocalFileRoot:config.LocalFileRoot,
-		TempFileRoot:config.TempFileRoot,
-		SshClient: client.Conn,
-		BadgerDb: db,
-		ConcurrencyLimiter:NewLimiter(config.ConcurrencyLimit),
+		RemoteFileRoot:     config.RemoteFileRoot,
+		LocalFileRoot:      config.LocalFileRoot,
+		TempFileRoot:       config.TempFileRoot,
+		SshClient:          client.Conn,
+		BadgerDb:           db,
+		ConcurrencyLimiter: NewLimiter(config.ConcurrencyLimit),
 	}
 
 	scheduler := cron.New()
@@ -143,7 +139,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 
 	scheduler.Run()
 
